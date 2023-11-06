@@ -1,0 +1,202 @@
+% Read the data from the first CSV file and extract date and closing price information*
+
+data2 = readtable('TCS.NS.csv');
+dates2 = datetime(data2.Date);
+prices2 = data2.Close;
+data = readtable('TCS2.NS.csv');
+dates = datetime(data.Date);
+prices = data.Close;
+
+figure;
+
+plot(data.Date, data.Close);
+
+title('TCS Stock Prices Over Time');
+
+xlabel('Date');
+
+ylabel('Closing Price');
+
+% Smooth the signal using a moving average filter
+
+windowSize = 5;
+
+% Size of the moving average window
+
+SmoothedSignal =  movmean(data.Close,windowSize);
+
+figure;
+
+plot(data.Date,data.Close,'b','LineWidth',1.5);
+
+hold on;
+
+plot(data.Date,SmoothedSignal,'r','LineWidth',1.5;
+
+title('Original vs smoothedSignal');
+
+xlabel('Dates');
+
+ylabel('Closing Price');
+
+legend({'Original','smoothedSignal'},'Location','southwest');
+
+%ADF test
+
+[h, pValue] = adftest(data.Close);
+display(h);
+display(pValue);
+
+for p = 1:3
+for d = 1:2
+for q = 1:3
+arimaModel = arima(p, d, q);
+[fit, ~, logL] = estimate(arimaModel, data);
+aic = -2 * logL + 2 * (p + d + q + 1);
+bic = -2 * logL + log(numel(data)) * (p + d + q + 1);
+fprintf('ARIMA(%d,%d,%d) - AIC: %.2f, BIC: %.2f\n', p, d, q, aic, bic);
+end
+end
+end
+
+figure;
+autocorr(data);
+title('Autocorrelation Plot');
+figure;
+parcorr(data);
+title('Partial Autocorrelation Plot');
+
+% Differencing the data 
+
+differencedData = diff(data.Close);
+
+%ADF test after differencing
+
+[h1, pValue1] = adftest(differencedData.Close);
+
+display(h1);
+display(pValue1);
+
+figure;
+autocorr(differencedData);
+title('Autocorrelation Plot');
+figure;
+parcorr(differencedData);
+
+% AR model
+
+% Define the split ratio for training and testing data
+
+splitRatio = 0.8; % 80% for training, 20% for testing
+
+% Get the total number of observations in the dataset
+numObs = size(data, 1);
+
+% Calculate the number of observations for training data based on the split ratio
+numTrainObs = round(splitRatio * numObs);
+
+% Divide the data into training and testing sets
+trainData = data(1:numTrainObs, :);
+testData = data(numTrainObs+1:end, :);
+
+% Fit an autoregressive (AR) model of order1
+
+arModel = ar(trainData.Close, p);
+
+% Predict future values using the AR model
+[predictedValues, predictionError] = predict(arModel, testData.Close, 1);
+
+% Plot the actual and predicted stock prices on a new figure
+
+figure;
+plot(testData.Date, testData.Close, 'b', 'DisplayName', 'Actual Prices');
+hold on;
+plot(testData.Date, predictedValues, 'r', 'DisplayName', 'Predicted Prices');
+xlabel('Date');
+ylabel('Stock Price');
+title('AR Model Prediction');
+legend('show');
+
+% Estimating the ARIMA model using differenced data
+arimaModel = arima(p, d, q);
+arimaFit = estimate(arimaModel, differencedData);
+residuals = infer(arimaFit, differencedData);
+
+%plotting the residuals
+figure;
+autocorr(residuals);
+title('Residual ACF');
+figure;
+parcorr(residuals);
+title('Residual PACF');
+figure;
+plot(residuals);
+title('Residual Time Series');
+figure;
+qqplot(residuals);
+title('Residual QQ Plot');
+
+estimatedModel = estimate(arimaModel, prices);
+
+% Forecast future prices using the fitted ARIMA model
+numForecastPeriods = 64; % Number of periods to forecast
+forecast = forecast(estimatedModel, numForecastPeriods, 'Y0', prices);
+
+% Plot the historical prices and forecasted prices
+figure;
+plot(dates2, prices2, 'LineWidth', 1.5);
+hold on;
+
+forecastDates = dates(end) + 1:dates(end) + numForecastPeriods;
+
+% Plot forecasted prices with readable dates
+plot(forecastDates, forecast, 'r', 'LineWidth', 1.5);
+
+% Convert serial dates to readable dates on the x-axis
+datetick('x', 'mm/dd/yyyy');
+xlabel('Date');
+ylabel('Stock Price');
+title('Historical and Forecasted Stock Prices (ARIMA)');
+legend('Historical Prices', 'Forecasted Prices');
+grid on;
+
+% Initialize arrays to store forecasted values and residuals
+rollingForecast = [];
+rollingResiduals = [];
+
+for i = windowSize:length(prices)
+% Select a subset of data for each iteration
+subsetData = data(1:i, :);
+
+
+% Fit ARIMA model for the subset data
+arimaModel = arima(p, d, q);
+arimaFit = estimate(arimaModel, subsetData.Close);
+
+% Forecast the next value using the fitted ARIMA model
+[forecastedValue, forecastedError] = forecast(arimaFit, 1, 'Y0', subsetData.Close);
+
+% Append the forecasted value to the rolling forecast array
+rollingForecast = [rollingForecast; forecastedValue];
+
+% Calculate residuals and append to the rolling residuals array
+currentResiduals = infer(arimaFit, subsetData.Close);
+rollingResiduals = [rollingResiduals; currentResiduals(end)];
+
+end
+
+% Plot the rolling forecast and residuals
+figure;
+plot(dates(windowSize:end), prices(windowSize:end), 'b', 'LineWidth', 1.5);
+hold on;
+plot(dates(windowSize:end), rollingForecast, 'r', 'LineWidth', 1.5);
+xlabel('Date');
+ylabel('Stock Price');
+title('Rolling Average ARIMA Forecast');
+legend('Actual Prices', 'Rolling Forecast');
+
+figure;
+plot(dates(windowSize:end), rollingResiduals, 'g', 'LineWidth', 1.5);
+xlabel('Date');
+ylabel('Residuals');
+title('Rolling Residuals');
