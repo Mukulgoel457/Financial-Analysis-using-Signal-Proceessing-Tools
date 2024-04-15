@@ -12,7 +12,8 @@ This project explores the application of signal processing techniques in financi
 - **Project_code(MATLAB).m.txt**: Contains MATLAB scripts used for part of the analysis, demonstrating the application of signal processing in another scientific computing environment.
 - **Testing Data (TCS.NS).csv & Testing Data (TCS2.NS).csv**: These datasets include historical stock prices used to test the algorithms developed.
 
-##In-Depth Methodology
+## In-Depth Methodology
+
 This project applies advanced Fourier and Wavelet Transforms to decompose the frequency components of financial time series data. The detailed methodology in the Python notebook and MATLAB scripts not only explains the theoretical basis but also provides practical examples and results to demonstrate the efficacy of these techniques in predicting market trends.
 
 ## Installation and Setup
