@@ -21,11 +21,11 @@ This project applies advanced Fourier and Wavelet Transforms to decompose the fr
 The primary goal of this project is to use spectral analysis to foresee and understand market volatility and potential trend reversals. The insights gained from this analysis are intended to enhance strategic decision-making in financial risk management and investment strategies.
 
 ## Extended FAQ Section
-# Q: Who can benefit from using this project?
+### Q: Who can benefit from using this project?
 
 A: Financial analysts, data scientists, economic researchers, and anyone interested in sophisticated analysis techniques.
 
-# Q: Can I use these tools for real-time market analysis?
+### Q: Can I use these tools for real-time market analysis?
 
 A: Yes, the methodologies developed can be adapted for real-time analysis, although the primary focus is on historical data.
 
