@@ -2,15 +2,15 @@
 
 ## Overview
 
-This project explores the application of signal processing techniques in financial markets analysis. It aims to extract meaningful patterns and trends from stock market data that traditional analytical methods might overlook. Using tools from both Python and MATLAB environments, this project combines innovative algorithms with financial theories to predict stock movements and volatility.
+This project uniquely integrates signal processing techniques with financial market analysis to uncover hidden patterns and trends that are not detectable through conventional methods. It is designed to provide predictive insights and a deeper understanding of market dynamics using a multi-disciplinary approach combining engineering and economic theories.
 
-## Project Files Description
+## Expanded Project Files Description
 
-- **Code Explanation.pdf**: Contains detailed explanations of the algorithms and their implementations.
-- **Project code(py).ipynb**: This Jupyter notebook is where all the Python-based analysis is performed.
-- **Project Documentation(Final).pdf**: Includes the entire project report with methodology, results, and discussions.
-- **Project_code(MATLAB).m.txt**: Contains MATLAB scripts used for part of the analysis, demonstrating the application of signal processing in another scientific computing environment.
-- **Testing Data (TCS.NS).csv & Testing Data (TCS2.NS).csv**: These datasets include historical stock prices used to test the algorithms developed.
+- **Code Explanation.pdf**: This document offers an exhaustive explanation of the underlying algorithms, their conceptual foundations, and step-by-step implementation guidance. It serves as a vital resource for anyone looking to understand the technical aspects of the analysis.
+- **Project code(py).ipynb**: A comprehensive Jupyter notebook that includes all the Python code utilized in the project. It encompasses modules for data preprocessing, detailed analytical procedures, result visualization, and commentary explaining each step to ensure clarity and usability for all users.
+- **Project Documentation(Final).pdf**: A complete and final version of the project report which includes detailed discussions on the methodology employed, data analysis, results, and conclusions drawn from the study. This document is structured to guide readers through the project's workflow and findings.
+- **Project_code(MATLAB).m.txt**: A MATLAB script file that demonstrates the use of classical and contemporary signal processing techniques to analyze financial datasets. The script is annotated with comments to aid in understanding each processing step.
+- **Testing Data (TCS.NS).csv & Testing Data (TCS2.NS).csv**: These CSV files contain the test datasets used throughout the project. They include comprehensive stock price data from TCS to empirically test and validate the analytical methods developed.
 
 ## In-Depth Methodology
 
